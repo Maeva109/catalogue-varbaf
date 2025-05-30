@@ -27,6 +27,7 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   String? _categorieError;
   bool _isGridView = true;
   final List<String> _carouselImages = [
+    'https://images.pexels.com/photos/29663370/pexels-photo-29663370/free-photo-of-portrait-of-a-woman-with-colorful-beaded-hair.jpeg',
     'https://images.pexels.com/photos/8628442/pexels-photo-8628442.jpeg',
     'https://images.pexels.com/photos/5028727/pexels-photo-5028727.jpeg',
     'https://images.pexels.com/photos/3307279/pexels-photo-3307279.jpeg',

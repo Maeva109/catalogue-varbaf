@@ -52,6 +52,17 @@ class ApiService {
     }
   }
 
+  Future<void> updateStock(int produitId, int newStock) async {
+    final response = await http.patch(
+      Uri.parse('$baseUrl/produits/$produitId/'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'stock': newStock}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update stock');
+    }
+  }
+
   Future<void> deleteProduit(int id) async {
     final response = await http.delete(Uri.parse('$baseUrl/produits/$id/'));
     if (response.statusCode != 204) {

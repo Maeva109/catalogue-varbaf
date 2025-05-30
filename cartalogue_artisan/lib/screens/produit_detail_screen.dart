@@ -56,7 +56,7 @@ class ProduitDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${produit.prix.toStringAsFixed(2)} €',
+                        '${produit.prix.toStringAsFixed(0)} FCFA',
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,

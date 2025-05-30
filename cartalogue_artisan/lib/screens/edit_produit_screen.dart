@@ -117,7 +117,8 @@ class _EditProduitScreenState extends State<EditProduitScreen> {
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _prixController,
-                      decoration: const InputDecoration(labelText: 'Prix'),
+                      decoration: const InputDecoration(
+                          labelText: 'Prix', prefixText: 'FCFA '),
                       keyboardType: TextInputType.number,
                       validator: (value) => value == null || value.isEmpty
                           ? 'Champ requis'

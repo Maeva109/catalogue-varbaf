@@ -154,7 +154,7 @@ class _AjoutProduitScreenState extends State<AjoutProduitScreen> {
                       decoration: const InputDecoration(
                         labelText: 'Prix',
                         border: OutlineInputBorder(),
-                        prefixText: '€ ',
+                        prefixText: 'FCFA ',
                       ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
