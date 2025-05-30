@@ -131,8 +131,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://127.0.0.1:3000",
     "http://127.0.0.1:8080",
-    "http://localhost:57056",
-    "http://127.0.0.1:57056",
+    "http://localhost:57479",
+    "http://127.0.0.1:57479",
 ]
 
 # REST Framework configuration

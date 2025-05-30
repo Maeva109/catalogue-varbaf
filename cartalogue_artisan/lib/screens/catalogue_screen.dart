@@ -22,14 +22,16 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
   final ApiService _apiService = ApiService();
   late Future<List<Produit>> _produitsFuture;
   List<Categorie> _categories = [];
-  String selectedCategorie = 'Filtrer par catégorie';
+  Categorie? _selectedCategorie;
+  bool _isLoadingCategories = true;
+  String? _categorieError;
+  bool _isGridView = true;
   final List<String> _carouselImages = [
     'https://images.pexels.com/photos/8628442/pexels-photo-8628442.jpeg',
     'https://images.pexels.com/photos/5028727/pexels-photo-5028727.jpeg',
     'https://images.pexels.com/photos/3307279/pexels-photo-3307279.jpeg',
     'https://images.pexels.com/photos/31576064/pexels-photo-31576064/free-photo-of-colorful-moroccan-baskets-and-textiles-in-marrakech-market.jpeg',
   ];
-  bool _isGridView = true;
 
   @override
   void initState() {
@@ -37,25 +39,34 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
     _loadCategoriesAndProduits();
   }
 
-  // Charge les catégories et initialise la liste des produits
   Future<void> _loadCategoriesAndProduits() async {
-    final cats = await _apiService.getCategories();
     setState(() {
-      _categories = cats;
-      selectedCategorie = 'Toutes';
-      _produitsFuture = _apiService.getProduits();
+      _isLoadingCategories = true;
+      _categorieError = null;
     });
+    try {
+      final cats = await _apiService.getCategories();
+      setState(() {
+        _categories = cats;
+        _selectedCategorie = null;
+        _produitsFuture = _apiService.getProduits();
+        _isLoadingCategories = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoadingCategories = false;
+        _categorieError = e.toString();
+      });
+    }
   }
 
-  // Recharge les produits selon la catégorie sélectionnée
   void _reloadProduits() {
     setState(() {
-      if (selectedCategorie == 'Toutes') {
+      if (_selectedCategorie == null) {
         _produitsFuture = _apiService.getProduits();
       } else {
-        final cat = _categories.firstWhere((c) => c.nom == selectedCategorie,
-            orElse: () => _categories.first);
-        _produitsFuture = _apiService.getProduitsByCategorie(cat.id);
+        _produitsFuture =
+            _apiService.getProduitsByCategorie(_selectedCategorie!.id);
       }
     });
   }
@@ -74,6 +85,13 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                 context,
                 MaterialPageRoute(builder: (_) => const PanierScreen()),
               );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.category),
+            tooltip: 'Gestion des catégories',
+            onPressed: () {
+              Navigator.pushNamed(context, '/admin-categories');
             },
           ),
           IconButton(
@@ -169,31 +187,64 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                     ))
                 .toList(),
           ),
-          // Menu déroulant des catégories dynamique
+          // Menu déroulant dynamique des catégories
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: DropdownButton<String>(
-              value: selectedCategorie,
-              hint: const Text('Filtrer par catégorie'),
-              items: [
-                const DropdownMenuItem(
-                  value: 'Toutes',
-                  child: Text('Toutes'),
-                ),
-                ..._categories.map((cat) => DropdownMenuItem(
-                      value: cat.nom,
-                      child: Text(cat.nom),
-                    ))
-              ],
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    selectedCategorie = value;
-                    _reloadProduits();
-                  });
-                }
-              },
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: _isLoadingCategories
+                ? const Center(child: CircularProgressIndicator())
+                : _categorieError != null
+                    ? Row(
+                        children: [
+                          const Icon(Icons.error, color: Colors.red),
+                          const SizedBox(width: 8),
+                          Expanded(child: Text(_categorieError!)),
+                          IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: _loadCategoriesAndProduits,
+                          ),
+                        ],
+                      )
+                    : DropdownButton<Categorie?>(
+                        value: _selectedCategorie,
+                        isExpanded: true,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        hint: Row(
+                          children: const [
+                            Icon(Icons.category),
+                            SizedBox(width: 8),
+                            Text('Choisir une catégorie'),
+                          ],
+                        ),
+                        items: [
+                          DropdownMenuItem<Categorie?>(
+                            value: null,
+                            child: Row(
+                              children: const [
+                                Icon(Icons.all_inbox),
+                                SizedBox(width: 8),
+                                Text('Toutes les catégories'),
+                              ],
+                            ),
+                          ),
+                          ..._categories.map((cat) =>
+                              DropdownMenuItem<Categorie?>(
+                                value: cat,
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.label_important_outline),
+                                    const SizedBox(width: 8),
+                                    Text(cat.nom),
+                                  ],
+                                ),
+                              ))
+                        ],
+                        onChanged: (cat) {
+                          setState(() {
+                            _selectedCategorie = cat;
+                            _reloadProduits();
+                          });
+                        },
+                      ),
           ),
           // Grille de produits
           Expanded(

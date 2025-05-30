@@ -4,7 +4,7 @@ from .models import Categorie, Produit
 class CategorieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Categorie
-        fields = ['id', 'nom']
+        fields = '__all__'
 
 class ProduitSerializer(serializers.ModelSerializer):
     categorie = CategorieSerializer(read_only=True)
