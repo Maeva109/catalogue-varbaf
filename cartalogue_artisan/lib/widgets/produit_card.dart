@@ -7,6 +7,7 @@ class ProduitCard extends StatelessWidget {
   final VoidCallback? onFavorite;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final VoidCallback? onAddToCart;
   final bool isNouveau;
 
   const ProduitCard({
@@ -16,6 +17,7 @@ class ProduitCard extends StatelessWidget {
     this.onFavorite,
     this.onEdit,
     this.onDelete,
+    this.onAddToCart,
     this.isNouveau = false,
   });
 

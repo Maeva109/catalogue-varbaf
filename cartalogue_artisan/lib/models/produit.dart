@@ -9,8 +9,8 @@ class Produit {
   final int stock;
   final bool isFavorite;
   final Categorie categorie;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Produit({
     required this.id,
@@ -21,8 +21,8 @@ class Produit {
     required this.stock,
     required this.isFavorite,
     required this.categorie,
-    required this.createdAt,
-    required this.updatedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Produit.fromJson(Map<String, dynamic> json) {
@@ -34,9 +34,15 @@ class Produit {
       urlImage: json['url_image'],
       stock: json['stock'],
       isFavorite: json['is_favorite'],
-      categorie: Categorie.fromJson(json['categorie']),
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      categorie: json['categorie'] != null
+          ? Categorie.fromJson(json['categorie'])
+          : Categorie(id: 0, nom: 'Inconnue'),
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : null,
     );
   }
 

@@ -268,8 +268,10 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                         itemCount: produits.length,
                         itemBuilder: (context, index) {
                           final produit = produits[index];
-                          final isNouveau = produit.createdAt.isAfter(
-                              DateTime.now().subtract(const Duration(days: 7)));
+                          final isNouveau = produit.createdAt?.isAfter(
+                                  DateTime.now()
+                                      .subtract(const Duration(days: 7))) ??
+                              false;
                           return ProduitCard(
                             produit: produit,
                             isNouveau: isNouveau,
@@ -286,8 +288,10 @@ class _CatalogueScreenState extends State<CatalogueScreen> {
                         itemCount: produits.length,
                         itemBuilder: (context, index) {
                           final produit = produits[index];
-                          final isNouveau = produit.createdAt.isAfter(
-                              DateTime.now().subtract(const Duration(days: 7)));
+                          final isNouveau = produit.createdAt?.isAfter(
+                                  DateTime.now()
+                                      .subtract(const Duration(days: 7))) ??
+                              false;
                           return Card(
                             margin: const EdgeInsets.symmetric(
                                 horizontal: 12, vertical: 8),

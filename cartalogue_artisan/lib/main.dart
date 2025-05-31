@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'screens/catalogue_screen.dart';
 import 'screens/ajout_produit_screen.dart';
-import 'screens/categorie_admin_screen.dart';
+import 'screens/categorie_admin _screen.dart';
+import 'screens/main_screen.dart';
 import 'package:provider/provider.dart';
 import 'services/panier_service.dart';
 import '../widgets/panier_icon.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Catalogue Artisanal',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepOrange,
@@ -59,7 +61,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const CatalogueScreen(),
+      home: const MainScreen(),
       routes: {
         '/ajout-produit': (context) => const AjoutProduitScreen(),
         '/admin-categories': (context) => const CategorieAdminScreen(),
